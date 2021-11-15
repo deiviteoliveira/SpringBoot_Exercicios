@@ -2,6 +2,8 @@ package br.com.generation.lojadeGames.controle;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,57 +24,48 @@ import br.com.generation.lojadeGames.repository.CategoriaRepository;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class CategoriaController {
 
-	
 	@Autowired
-	private CategoriaRepository repository;
-	
+	private CategoriaRepository categoriaRepository;
+
 	@GetMapping
-	public ResponseEntity<List<Categoria>> getAll () {
-		return ResponseEntity.ok(repository.findAll()); // OK 200
-		
-		
+	public ResponseEntity<List<Categoria>> getAll() {
+		return ResponseEntity.ok(categoriaRepository.findAll()); // OK 200
+
 	}
-	
+
 	@GetMapping("/{id}")
-    public ResponseEntity<Categoria> GetById(@PathVariable long id) {
-    	return repository.findById(id)
-    			.map(resp -> ResponseEntity.ok(resp))
-    			.orElse(ResponseEntity.notFound().build());
-	
+	public ResponseEntity<Categoria> GetById(@PathVariable long id) {
+		return categoriaRepository.findById(id).map(resp -> ResponseEntity.ok(resp))
+				.orElse(ResponseEntity.notFound().build());
+
 	}
-	
-	
-	
+
 	@GetMapping("/genero/{genero}")
-    public ResponseEntity<List<Categoria>> getByCategoria(@PathVariable String genero){
-    	   return ResponseEntity.ok(repository.findAllByGeneroContainingIgnoreCase(genero));
-    }
+	public ResponseEntity<List<Categoria>> getByCategoria(@PathVariable String genero) {
+		return ResponseEntity.ok(categoriaRepository.findAllByGeneroContainingIgnoreCase(genero));
+	}
 
-	  @PostMapping
-	    public ResponseEntity<Categoria> postCategoria(@RequestBody Categoria id){
-	    	return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(id));
-	    	
-	    }
+	@PostMapping
+	public ResponseEntity<Categoria> postCategoria(@Valid @RequestBody Categoria categoria) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(categoriaRepository.save(categoria));
 
-	  @PutMapping
-	    public ResponseEntity<Categoria> putCategoria(@RequestBody Categoria id){
-	    	return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(id));
-	    	
-	    }
+	}
 
-	  @DeleteMapping("/{id}")
-	    public void deleteCategoria(@PathVariable long id) {
-	    	repository.deleteById(id
-	    			);
-	    	
-	    }
-	    
-	  
-	  
-	  
+	@PutMapping
+	public ResponseEntity<Categoria> putCategoria(@Valid @RequestBody Categoria categoria) {
+		return categoriaRepository.findById(categoria.getId()).map(resposta -> {
+			return ResponseEntity.ok().body(categoriaRepository.save(categoria));
+		}).orElse(ResponseEntity.notFound().build());
+
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> delete(@PathVariable long id) {
+		return categoriaRepository.findById(id).map(resposta -> {
+
+			categoriaRepository.deleteById(id);
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		}).orElse(ResponseEntity.notFound().build());
+	}
+
 }
-
-
-
-
-

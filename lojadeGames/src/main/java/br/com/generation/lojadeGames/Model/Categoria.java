@@ -22,87 +22,62 @@ public class Categoria {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
+
 	@NotBlank
-	@NotNull(message = "o campo é obrigatório")
+	@NotNull(message = "o atributo Genero é obrigatório")
 	@Size(min = 5, max = 100)
 	private String genero;
-	
-	
-	@NotNull(message = "o campo é obrigatório")
+
+	@NotNull(message = "o atributo Plataforma é obrigatório")
 	@Size(min = 5, max = 100)
 	private String plataforma;
-	
-	
-	@NotNull(message = "o campo é obrigatório")
+
+	@NotNull(message = "o atributo Condição é obrigatório")
 	@Size(min = 5, max = 100)
 	private String condicao;
 
-	
 	@OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties("categoria")
 	private List<Produto> produto;
-	
-
-	
 
 	public long getId() {
 		return id;
 	}
 
-
 	public void setId(long id) {
 		this.id = id;
 	}
-
 
 	public String getGenero() {
 		return genero;
 	}
 
-
 	public void setGenero(String genero) {
 		this.genero = genero;
 	}
-
 
 	public String getPlataforma() {
 		return plataforma;
 	}
 
-
 	public void setPlataforma(String plataforma) {
 		this.plataforma = plataforma;
 	}
-
 
 	public String getCondicao() {
 		return condicao;
 	}
 
-
 	public void setCondicao(String condicao) {
 		this.condicao = condicao;
 	}
-
 
 	public List<Produto> getProduto() {
 		return produto;
 	}
 
-
 	public void setProduto(List<Produto> produto) {
 		this.produto = produto;
 	}
-	
-	
-	
+
 }
-
-
-
-
-
-
-
-
